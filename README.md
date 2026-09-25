@@ -25,4 +25,4 @@ cd steamos-manager-gpd-win5
 ./install.sh
 ```
 
-Remove with `./uninstall.sh`.
+Update with `./update.sh`, remove with `./uninstall.sh`.
