@@ -39,9 +39,16 @@ def write(name, value):
         except FileNotFoundError:
             pass
         return
+    content = f"{value}\n"
+    try:
+        with open(path) as f:
+            if f.read() == content:
+                return
+    except FileNotFoundError:
+        pass
     tmp = os.path.join(VPOWER_DIR, f".{name}.tmp")
     with open(tmp, "w") as f:
-        f.write(f"{value}\n")
+        f.write(content)
     os.replace(tmp, path)
 
 
