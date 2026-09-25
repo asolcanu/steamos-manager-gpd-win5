@@ -1,0 +1,22 @@
+# Fan curve for steamos-manager-gpd-win5-fan.
+# Restart the service after editing:
+#   sudo systemctl restart steamos-manager-gpd-win5-fan
+
+# Seconds between checks
+interval = 2
+# °C the temperature must drop before the fan slows down
+hysteresis = 3
+# °C at which the fan runs at 100 % regardless of the curve
+critical = 95
+# hwmon sensors to read temp1_input from; the hottest one is used
+sensors = ["k10temp", "amdgpu"]
+
+# Temperature in °C = fan speed in %. Speeds between points are interpolated.
+# Measured on a Win 5 (fan: 25 % = 2200 rpm, 50 % = 3900 rpm, 100 % = 6450 rpm):
+# 25 W load settles at ~68 °C / 2800 rpm, 45 W CPU+GPU load at ~85 °C / 3500 rpm.
+[curve]
+50 = 20
+70 = 30
+80 = 30
+90 = 45
+95 = 70

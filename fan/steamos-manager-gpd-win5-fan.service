@@ -1,0 +1,9 @@
+[Unit]
+Description=GPD Win 5 fan curve
+
+[Service]
+ExecStart=/usr/bin/steamos-manager-gpd-win5-fan
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
