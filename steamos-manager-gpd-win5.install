@@ -1,0 +1,24 @@
+_units='steamos-manager-gpd-win5-tdp.service steamos-manager-gpd-win5-battery.service'
+
+# pacman's daemon-reload and dbus-reload hooks only run after these
+# scriptlets, so reload here before starting anything
+_reload() {
+  systemctl daemon-reload
+  systemctl reload dbus
+}
+
+post_install() {
+  _reload
+  systemctl enable --now $_units
+  echo ">>> Restart steamos-manager (or reboot) so Steam picks up the TDP slider:"
+  echo ">>>   systemctl --user restart steamos-manager"
+}
+
+post_upgrade() {
+  _reload
+  systemctl try-restart $_units
+}
+
+pre_remove() {
+  systemctl disable --now $_units
+}

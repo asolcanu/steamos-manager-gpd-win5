@@ -1,0 +1,12 @@
+[Unit]
+Description=GPD Win 5 TDP limit service for steamos-manager
+ConditionPathExists=/usr/bin/ryzenadj
+
+[Service]
+Type=dbus
+BusName=io.github.asolcanu.SteamOSManagerGpdWin5
+ExecStart=/usr/bin/steamos-manager-gpd-win5-tdp
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=GPD Win 5 battery time estimates for Steam (vpower stand-in)
+Wants=upower.service
+After=upower.service
+
+[Service]
+ExecStart=/usr/bin/steamos-manager-gpd-win5-battery
+RuntimeDirectory=vpower
+RuntimeDirectoryPreserve=restart
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
