@@ -15,7 +15,7 @@ depends=(
 )
 install=steamos-manager-gpd-win5.install
 source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('154db2f5e1d6a81616266286a51514c67110429296cc845db5b6885872acf144')
 
 package() {
   cd "$pkgname-$pkgver"
