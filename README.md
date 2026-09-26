@@ -3,6 +3,14 @@
 Steam Game Mode TDP slider, battery time estimates and a quiet fan curve for
 the GPD Win 5 on non-SteamOS distributions (e.g. CachyOS Handheld).
 
+> [!WARNING]
+> These services change power limits (up to 85 W) and control the fans
+> directly. A wrong setting or fan curve can overheat the device, and higher
+> power limits add heat and battery wear. They are only tested on one GPD Win 5
+> (G1618-05) running CachyOS, and are not affiliated with GPD or Valve.
+> Use at your own risk; the software comes without warranty (see
+> [LICENSE](LICENSE)).
+
 ## Services
 
 - **tdp**: steamos-manager `TdpLimit1` backend using ryzenadj (5–85 W).
