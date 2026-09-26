@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Fan curve for the GPD Win 5 via the gpd_fan hwmon driver. Hands the fan
+# Fan curve for the GPD Win 5 via the gpd_fan hwmon driver. Hands the fans
 # back to the EC's automatic curve on exit or when temperatures can't be read.
 
 import glob
@@ -11,7 +11,7 @@ import tomllib
 
 DEFAULT_CONFIG = "/etc/steamos-manager-gpd-win5/fan-curve.toml"
 
-# pwm1_enable values (drivers/hwmon/gpd-fan.c)
+# pwmN_enable values (drivers/hwmon/gpd-fan.c)
 MANUAL = 1
 AUTOMATIC = 2
 
@@ -64,22 +64,25 @@ def speed_for(curve, temp):
 
 class Fan:
     def __init__(self, hwmon):
-        self.pwm = os.path.join(hwmon, "pwm1")
-        self.enable = os.path.join(hwmon, "pwm1_enable")
+        # pwm1, plus pwm2 when the driver exposes the second fan
+        self.pwms = sorted(glob.glob(os.path.join(hwmon, "pwm[0-9]")))
         self.last = None
 
     def set_percent(self, percent):
-        # The EC can drop back to automatic (e.g. after resume)
-        if read_int(self.enable) != MANUAL:
-            write(self.enable, MANUAL)
-            self.last = None
+        for pwm in self.pwms:
+            # The EC can drop back to automatic (e.g. after resume)
+            if read_int(f"{pwm}_enable") != MANUAL:
+                write(f"{pwm}_enable", MANUAL)
+                self.last = None
         value = round(percent * 255 / 100)
         if value != self.last:
-            write(self.pwm, value)
+            for pwm in self.pwms:
+                write(pwm, value)
             self.last = value
 
     def automatic(self):
-        write(self.enable, AUTOMATIC)
+        for pwm in self.pwms:
+            write(f"{pwm}_enable", AUTOMATIC)
         self.last = None
 
 
@@ -104,12 +107,13 @@ def main():
 
     def stop(*_):
         fan.automatic()
-        print("Fan handed back to EC automatic control", flush=True)
+        print("Fans handed back to EC automatic control", flush=True)
         sys.exit(0)
 
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
-    print(f"Fan curve {config['curve']} on {hwmon}", flush=True)
+    names = ", ".join(os.path.basename(p) for p in fan.pwms)
+    print(f"Fan curve {config['curve']} on {hwmon} ({names})", flush=True)
 
     current = None  # speed in %, and the temperature it was chosen at
     current_temp = None

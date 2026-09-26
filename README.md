@@ -11,9 +11,11 @@ the GPD Win 5 on non-SteamOS distributions (e.g. CachyOS Handheld).
 - **battery**: mirrors UPower time estimates to `/run/vpower`, where Steam
   reads them.
 - **fan**: fan curve from `/etc/steamos-manager-gpd-win5/fan-curve.toml`, in
-  Game Mode and on the desktop. On exit the fans go back to the EC, which
+  Game Mode and on the desktop. Both fans follow the curve: through `pwm1`
+  with the stock driver, or `pwm1` and `pwm2` with the two-channel driver.
+  On exit the fans go back to the EC; with the stock driver, the second fan
   needs [gpd-fan-duo-fix](https://github.com/asolcanu/gpd-fan-duo-fix) for
-  the second fan.
+  that.
 
 ## Install
 
